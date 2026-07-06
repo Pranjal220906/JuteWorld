@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JUTE WORLD — Woven To Move</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700;800;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#0D0D0D;
+    --white:#FFFFFF;
+    --offwhite:#F1F0EC;
+    --gray:#767674;
+    --gray-line:#DDDBD3;
+    --volt:#DFFF4F;
+    --clay:#C1440E;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{background:var(--white);color:var(--black);font-family:'Inter',sans-serif;}
+  img{max-width:100%;display:block;}
+  a{color:inherit;text-decoration:none;}
+  button{font-family:'Inter',sans-serif;cursor:pointer;border:none;background:none;}
+  .display{font-family:'Anton',sans-serif;text-transform:uppercase;letter-spacing:.01em;}
+  .mono{font-family:'Space Mono',monospace;}
+  .wrap{max-width:1280px;margin:0 auto;padding:0 32px;}
+
+  /* ---------- Announcement bar ---------- */
+  #announce{
+    background:var(--black);color:var(--white);overflow:hidden;white-space:nowrap;height:34px;
+    display:flex;align-items:center;
+  }
+  #announce .track{display:flex;animation:scrollBar 20s linear infinite;}
+  #announce span{font-size:11.5px;font-weight:700;letter-spacing:.08em;padding:0 26px;text-transform:uppercase;}
+  #announce span b{color:var(--volt);}
+  @keyframes scrollBar{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+  /* ---------- Nav ---------- */
+  #nav{
+    position:sticky;top:0;z-index:100;background:var(--white);border-bottom:1px solid var(--gray-line);
+  }
+  #nav .inner{display:flex;align-items:center;justify-content:space-between;padding:16px 32px;max-width:1280px;margin:0 auto;gap:20px;}
+  .logo{font-family:'Anton',sans-serif;font-size:24px;letter-spacing:.03em;display:flex;align-items:center;}
+  .logo .thread{width:22px;height:4px;background:var(--volt);display:inline-block;margin:0 6px;transform:rotate(-18deg);}
+  .navlinks{display:flex;gap:30px;font-size:13.5px;font-weight:700;text-transform:uppercase;letter-spacing:.02em;}
+  .navlinks a{padding:6px 0;border-bottom:2px solid transparent;}
+  .navlinks a:hover, .navlinks a.active{border-color:var(--black);}
+  .navRight{display:flex;align-items:center;gap:18px;}
+  .iconBtn{font-size:19px;position:relative;}
+  #bagCount{
+    position:absolute;top:-8px;right:-10px;background:var(--black);color:var(--white);font-family:'Space Mono',monospace;
+    font-size:10px;font-weight:700;width:17px;height:17px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  }
+  .locMini{font-size:11px;font-weight:600;color:var(--gray);cursor:pointer;text-transform:uppercase;letter-spacing:.03em;}
+  .locMini b{color:var(--black);}
+  .navToggle{display:none;}
+
+  /* ---------- Hero ---------- */
+  #hero{position:relative;background:var(--offwhite);padding:70px 32px 0;overflow:hidden;}
+  .heroGrid{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:20px;}
+  .heroCopy .tag{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--clay);margin-bottom:14px;display:block;}
+  .heroCopy h1{font-size:clamp(44px,6.4vw,92px);line-height:.92;margin-bottom:20px;}
+  .heroCopy p{font-size:16px;color:#4a4a48;max-width:400px;margin-bottom:30px;line-height:1.55;}
+  .heroBtns{display:flex;gap:14px;flex-wrap:wrap;}
+  .btnBlack{
+    background:var(--black);color:var(--white);font-weight:800;font-size:14px;letter-spacing:.03em;
+    padding:16px 30px;border-radius:999px;text-transform:uppercase;
+  }
+  .btnBlack:hover{background:#222;}
+  .btnOutline{
+    border:2px solid var(--black);color:var(--black);font-weight:800;font-size:14px;letter-spacing:.03em;
+    padding:14px 28px;border-radius:999px;text-transform:uppercase;
+  }
+  .btnOutline:hover{background:var(--black);color:var(--white);}
+  .heroVisual{position:relative;height:460px;display:flex;align-items:center;justify-content:center;}
+  .floorShadow{
+    position:absolute;bottom:30px;width:320px;height:60px;background:radial-gradient(ellipse, rgba(0,0,0,.25), transparent 70%);
+    filter:blur(2px);
+  }
+  .heroProduct{position:relative;width:300px;height:380px;transform:rotate(-8deg);z-index:2;}
+  .heroProduct img{width:100%;height:100%;object-fit:contain;position:absolute;inset:0;}
+  .heroProduct .fallback{position:absolute;inset:0;}
+  .threadSlash{
+    position:absolute;top:18%;left:-6%;width:130%;height:34px;background:var(--volt);transform:rotate(-8deg);
+    z-index:1;opacity:.9;
+  }
+
+  /* ---------- Category tiles ---------- */
+  #cats{padding:90px 0;}
+  .sectionHead{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:12px;}
+  .sectionHead h2{font-size:clamp(28px,3.4vw,42px);}
+  .sectionHead .seeAll{font-size:13px;font-weight:700;text-transform:uppercase;border-bottom:2px solid var(--black);padding-bottom:2px;}
+  .catTiles{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+  .catTile{
+    position:relative;background:var(--offwhite);border-radius:18px;overflow:hidden;height:340px;
+    display:flex;flex-direction:column;justify-content:flex-end;padding:24px;cursor:pointer;
+  }
+  .catTile .catIc{
+    position:absolute;top:50%;left:50%;transform:translate(-50%,-58%);font-size:100px;opacity:.9;
+    transition:transform .3s ease;
+  }
+  .catTile:hover .catIc{transform:translate(-50%,-62%) scale(1.06);}
+  .catTile h3{font-size:22px;font-weight:800;position:relative;z-index:2;}
+  .catTile .arrow{position:relative;z-index:2;font-size:13px;font-weight:700;text-transform:uppercase;margin-top:6px;display:flex;align-items:center;gap:6px;}
+
+  /* ---------- Filter chips ---------- */
+  .chipRow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:30px;}
+  .chip{
+    padding:9px 18px;border:2px solid var(--black);border-radius:999px;font-size:12.5px;font-weight:700;
+    text-transform:uppercase;letter-spacing:.02em;background:var(--white);
+  }
+  .chip.active{background:var(--black);color:var(--white);}
+
+  /* ---------- Product grid ---------- */
+  #shop{padding:0 0 90px;}
+  .prodGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px 20px;}
+  .prodCard{cursor:pointer;}
+  .prodImgWrap{
+    position:relative;background:var(--offwhite);border-radius:16px;height:260px;overflow:hidden;
+    display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+  }
+  .prodImgWrap img{width:80%;height:80%;object-fit:contain;position:absolute;}
+  .prodImgWrap .fallback{position:absolute;width:70%;height:70%;}
+  .prodImgWrap .floorShadowSm{
+    position:absolute;bottom:20px;width:64%;height:22px;background:radial-gradient(ellipse, rgba(0,0,0,.22), transparent 70%);
+  }
+  .tagPill{
+    position:absolute;top:12px;left:12px;font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;
+    padding:5px 10px;border-radius:999px;z-index:3;
+  }
+  .tagPill.new{background:var(--volt);color:var(--black);}
+  .tagPill.best{background:var(--black);color:var(--white);}
+  .quickAdd{
+    position:absolute;bottom:12px;right:12px;background:var(--black);color:var(--white);width:38px;height:38px;
+    border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;z-index:3;
+    opacity:0;transform:translateY(6px);transition:opacity .2s ease, transform .2s ease;
+  }
+  .prodCard:hover .quickAdd{opacity:1;transform:translateY(0);}
+  .prodCard:hover .prodImgWrap{transform:scale(1.02);}
+  .prodImgWrap{transition:transform .25s ease;}
+  .prodInfo .cat{font-size:11px;color:var(--gray);text-transform:uppercase;letter-spacing:.04em;margin-bottom:2px;}
+  .prodInfo h3{font-size:15px;font-weight:700;margin-bottom:6px;}
+  .colorways{display:flex;gap:5px;margin-bottom:8px;}
+  .colorways span{width:14px;height:14px;border-radius:50%;border:1px solid rgba(0,0,0,.15);display:inline-block;}
+  .prodInfo .price{font-family:'Space Mono',monospace;font-size:14.5px;font-weight:700;}
+
+  /* ---------- Statement banner ---------- */
+  #statement{
+    background:var(--black);color:var(--white);padding:110px 0;text-align:center;position:relative;overflow:hidden;
+  }
+  #statement .threadSlash2{
+    position:absolute;top:50%;left:-10%;width:120%;height:26px;background:var(--volt);transform:rotate(-6deg) translateY(-50%);
+    opacity:.15;
+  }
+  #statement h2{font-size:clamp(32px,6vw,80px);line-height:1.0;position:relative;z-index:2;}
+  #statement h2 span{color:var(--volt);}
+  #statement p{color:#bdbdbb;margin-top:18px;font-size:14.5px;position:relative;z-index:2;}
+
+  /* ---------- Why row ---------- */
+  #why{padding:90px 0;border-bottom:1px solid var(--gray-line);}
+  .whyRow{display:grid;grid-template-columns:repeat(4,1fr);gap:26px;}
+  .whyItem{text-align:left;border-top:3px solid var(--black);padding-top:16px;}
+  .whyItem .ic{font-size:26px;margin-bottom:10px;display:block;}
+  .whyItem h3{font-size:14.5px;font-weight:800;text-transform:uppercase;letter-spacing:.02em;margin-bottom:8px;}
+  .whyItem p{font-size:13px;color:var(--gray);line-height:1.55;}
+
+  /* ---------- Newsletter ---------- */
+  #news{background:var(--offwhite);padding:80px 0;text-align:center;}
+  #news h2{font-size:clamp(26px,3.6vw,40px);margin-bottom:12px;}
+  #news p{color:var(--gray);margin-bottom:26px;font-size:14.5px;}
+  .newsForm{display:flex;max-width:440px;margin:0 auto;gap:0;border:2px solid var(--black);border-radius:999px;overflow:hidden;}
+  .newsForm input{flex:1;border:none;padding:14px 20px;font-size:14px;background:transparent;}
+  .newsForm input:focus{outline:none;}
+  .newsForm button{background:var(--black);color:var(--white);font-weight:800;padding:14px 26px;text-transform:uppercase;font-size:13px;}
+
+  /* ---------- Footer ---------- */
+  footer{background:var(--black);color:#cfcfcb;padding:60px 0 26px;}
+  .footGrid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:30px;margin-bottom:44px;}
+  .footGrid h4{color:var(--white);font-size:12.5px;text-transform:uppercase;letter-spacing:.05em;margin-bottom:16px;}
+  .footGrid ul{list-style:none;}
+  .footGrid li{margin-bottom:10px;font-size:13.5px;}
+  .footGrid li:hover{color:var(--volt);}
+  .footLogo{font-family:'Anton',sans-serif;color:var(--white);font-size:22px;margin-bottom:14px;}
+  .footAbout{font-size:13px;color:#98988f;max-width:280px;line-height:1.6;}
+  .footBottom{
+    display:flex;justify-content:space-between;border-top:1px solid #2a2a26;padding-top:22px;font-size:12px;color:#7c7c74;flex-wrap:wrap;gap:10px;
+  }
+
+  /* ---------- Bag drawer ---------- */
+  #bagOverlay{
+    position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.5);opacity:0;pointer-events:none;transition:opacity .25s ease;
+  }
+  #bagOverlay.show{opacity:1;pointer-events:auto;}
+  #bagDrawer{
+    position:fixed;top:0;right:0;bottom:0;width:420px;max-width:92vw;background:var(--white);z-index:201;
+    transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;padding:26px;
+  }
+  #bagOverlay.show #bagDrawer{transform:translateX(0);}
+  #bagDrawer .bagHead{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}
+  #bagDrawer h2{font-size:22px;}
+  #bagDrawer .closeX{font-size:22px;background:var(--offwhite);width:34px;height:34px;border-radius:50%;}
+  #bagItems{flex:1;overflow-y:auto;}
+  .bagRow{display:flex;gap:14px;padding:14px 0;border-bottom:1px solid var(--gray-line);}
+  .bagRow .thumb{width:64px;height:64px;background:var(--offwhite);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:28px;}
+  .bagRow .info{flex:1;}
+  .bagRow .info h4{font-size:14px;font-weight:700;margin-bottom:4px;}
+  .bagRow .info .p{font-family:'Space Mono',monospace;font-size:13px;color:var(--gray);}
+  .bagRow button{font-size:12px;font-weight:700;color:var(--clay);}
+  .bagFooter{border-top:2px solid var(--black);padding-top:18px;margin-top:10px;}
+  .bagTotal{display:flex;justify-content:space-between;font-weight:800;font-size:16px;margin-bottom:16px;}
+  .emptyBag{text-align:center;color:var(--gray);font-size:13.5px;padding:60px 0;}
+
+  /* ---------- Modals ---------- */
+  .overlay{
+    position:fixed;inset:0;z-index:220;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;
+    padding:20px;opacity:0;pointer-events:none;transition:opacity .2s ease;
+  }
+  .overlay.show{opacity:1;pointer-events:auto;}
+  .modal{
+    background:var(--white);border-radius:20px;padding:30px;max-width:420px;width:100%;max-height:88vh;overflow-y:auto;position:relative;
+  }
+  .modal h2{font-size:22px;margin-bottom:6px;}
+  .modal .sub{font-size:13px;color:var(--gray);margin-bottom:20px;}
+  .modalClose{position:absolute;top:18px;right:18px;background:var(--offwhite);width:32px;height:32px;border-radius:50%;font-size:16px;}
+  .modal label{display:block;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.03em;margin:14px 0 6px;color:#555;}
+  .modal input,.modal textarea{
+    width:100%;border:2px solid var(--gray-line);border-radius:10px;padding:12px 14px;font-size:14px;font-family:'Inter',sans-serif;
+  }
+  .modal input:focus,.modal textarea:focus{outline:none;border-color:var(--black);}
+  .modalPrimary{
+    margin-top:20px;width:100%;padding:15px 0;border-radius:999px;background:var(--black);color:var(--white);font-weight:800;
+    font-size:14.5px;text-transform:uppercase;letter-spacing:.02em;
+  }
+  .modalPrimary:hover{background:#222;}
+  .modalGhost{
+    margin-top:10px;width:100%;padding:13px 0;border-radius:999px;border:2px solid var(--black);background:transparent;
+    font-weight:800;font-size:13px;text-transform:uppercase;
+  }
+  .miniSummary{background:var(--offwhite);border-radius:12px;padding:14px;font-size:13.5px;margin-bottom:4px;}
+  .cartRow{display:flex;justify-content:space-between;font-size:13.5px;padding:9px 0;border-bottom:1px dashed var(--gray-line);}
+  .cartRow:last-child{border-bottom:none;font-weight:800;}
+  .comingSoon{text-align:center;}
+  .comingSoon .ic{font-size:42px;margin-bottom:12px;}
+  .comingSoon h3{font-size:20px;margin-bottom:8px;}
+  .comingSoon p{font-size:13.5px;color:var(--gray);line-height:1.6;margin-bottom:16px;}
+  .comingSoon .loc{font-size:12px;color:var(--clay);margin-top:10px;font-weight:700;}
+
+  @media (max-width:960px){
+    .heroGrid{grid-template-columns:1fr;}
+    .heroVisual{height:340px;}
+    .catTiles{grid-template-columns:1fr;}
+    .prodGrid{grid-template-columns:repeat(2,1fr);}
+    .whyRow{grid-template-columns:repeat(2,1fr);}
+    .footGrid{grid-template-columns:1fr 1fr;}
+  }
+  @media (max-width:640px){
+    .navlinks{display:none;}
+    .prodGrid{grid-template-columns:1fr 1fr;gap:14px;}
+    .footGrid{grid-template-columns:1fr;}
+    #bagDrawer{width:100%;max-width:100%;}
+  }
+</style>
+</head>
+<body>
+
+<div id="announce"><div class="track" id="announceTrack"></div></div>
+
+<nav id="nav">
+  <div class="inner">
+    <div class="logo">JUTE<span class="thread"></span>WORLD</div>
+    <div class="navlinks">
+      <a href="#shop" class="active">Shop All</a>
+      <a href="#cats">Bags</a>
+      <a href="#cats">Home</a>
+      <a href="#cats">Accessories</a>
+      <a href="#why">Sustainability</a>
+    </div>
+    <div class="navRight">
+      <div class="locMini" id="locateBtn">📍 <b id="locText">Set location</b></div>
+      <div class="iconBtn" id="signinBtn">👤</div>
+      <div class="iconBtn" id="bagBtn">🧵<span id="bagCount">0</span></div>
+    </div>
+  </div>
+</nav>
+
+<section id="hero">
+  <div class="heroGrid">
+    <div class="heroCopy">
+      <span class="tag">Fall Collection · 100% Jute</span>
+      <h1 class="display">Woven<br>To Move</h1>
+      <p>Handwoven jute, built for daily life — bags, home, and accessories made from one of the earth's strongest natural fibres.</p>
+      <div class="heroBtns">
+        <button class="btnBlack" id="heroShopBtn">Shop Now</button>
+        <button class="btnOutline" onclick="document.getElementById('why').scrollIntoView({behavior:'smooth'})">Our Story</button>
+      </div>
+    </div>
+    <div class="heroVisual">
+      <div class="threadSlash"></div>
+      <div class="floorShadow"></div>
+      <div class="heroProduct" id="heroProduct"></div>
+    </div>
+  </div>
+</section>
+
+<section id="cats">
+  <div class="wrap">
+    <div class="sectionHead">
+      <h2 class="display">Shop By Category</h2>
+      <a href="#shop" class="seeAll">Shop All</a>
+    </div>
+    <div class="catTiles" id="catTiles"></div>
+  </div>
+</section>
+
+<section id="shop">
+  <div class="wrap">
+    <div class="sectionHead">
+      <h2 class="display">Just In</h2>
+    </div>
+    <div class="chipRow" id="chipRow"></div>
+    <div class="prodGrid" id="prodGrid"></div>
+  </div>
+</section>
+
+<section id="statement">
+  <div class="threadSlash2"></div>
+  <div class="wrap">
+    <h2 class="display">100% Natural.<br><span>0% Plastic.</span></h2>
+    <p>Every fibre biodegradable. Every weave done by hand.</p>
+  </div>
+</section>
+
+<section id="why">
+  <div class="wrap">
+    <div class="sectionHead"><h2 class="display">Why Jute World</h2></div>
+    <div class="whyRow">
+      <div class="whyItem"><span class="ic">🌿</span><h3>Natural Fibre</h3><p>100% biodegradable jute, grown and woven across West Bengal's artisan belts.</p></div>
+      <div class="whyItem"><span class="ic">✋</span><h3>Handwoven</h3><p>Every piece made by verified artisan clusters, not a factory line.</p></div>
+      <div class="whyItem"><span class="ic">🔒</span><h3>Secure Checkout</h3><p>Card, UPI & net banking gateway launching soon — fully encrypted.</p></div>
+      <div class="whyItem"><span class="ic">🚚</span><h3>Pan-India Delivery</h3><p>Shipping nationwide, direct from the loom to your door.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="news">
+  <div class="wrap">
+    <h2 class="display">Join The Weave</h2>
+    <p>Get early access to new drops, restocks, and launch-day offers.</p>
+    <div class="newsForm">
+      <input type="email" id="newsEmail" placeholder="Enter your email">
+      <button id="newsSubmit">Sign Up</button>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <div class="footGrid">
+      <div>
+        <div class="footLogo">JUTE WORLD</div>
+        <p class="footAbout">India's boldest marketplace for handwoven jute — bags, home, and accessories made to move with you.</p>
+      </div>
+      <div><h4>Shop</h4><ul><li>Bags</li><li>Home</li><li>Accessories</li><li>Sale</li></ul></div>
+      <div><h4>Company</h4><ul><li>About</li><li>Artisans</li><li>Careers</li><li>Press</li></ul></div>
+      <div><h4>Help</h4><ul><li>Order Status</li><li>Shipping</li><li>Returns</li><li>Contact Us</li></ul></div>
+    </div>
+    <div class="footBottom">
+      <span>© 2026 Jute World. All rights reserved.</span>
+      <span>India</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Bag drawer -->
+<div id="bagOverlay">
+  <div id="bagDrawer">
+    <div class="bagHead"><h2>Your Bag</h2><button class="closeX" id="bagClose">✕</button></div>
+    <div id="bagItems"></div>
+    <div class="bagFooter">
+      <div class="bagTotal"><span>Total</span><span id="bagTotal">₹0</span></div>
+      <button class="modalPrimary" id="checkoutBtn">Checkout</button>
+    </div>
+  </div>
+</div>
+
+<!-- Sign in modal -->
+<div class="overlay" id="signinOverlay">
+  <div class="modal">
+    <button class="modalClose" data-close="signinOverlay">✕</button>
+    <h2>Sign In</h2>
+    <p class="sub">Save your bag and track orders.</p>
+    <label>Name</label><input id="siName" type="text" placeholder="Your name">
+    <label>Email</label><input id="siEmail" type="email" placeholder="you@example.com">
+    <button class="modalPrimary" id="siSubmit">Sign In</button>
+  </div>
+</div>
+
+<!-- Checkout step 1 -->
+<div class="overlay" id="orderOverlay">
+  <div class="modal">
+    <button class="modalClose" data-close="orderOverlay">✕</button>
+    <h2>Checkout</h2>
+    <p class="sub">Anyone can order — no account needed.</p>
+    <div class="miniSummary" id="orderSummary"></div>
+    <label>Full Name</label><input id="ordName" type="text" placeholder="Full name">
+    <label>Mobile Number</label><input id="ordMobile" type="tel" placeholder="10-digit mobile number">
+    <label>Delivery Address</label><textarea id="ordAddress" rows="2" placeholder="House no, street, city"></textarea>
+    <button class="modalPrimary" id="toPay">Proceed to Pay →</button>
+  </div>
+</div>
+
+<!-- Payment coming soon -->
+<div class="overlay" id="payOverlay">
+  <div class="modal">
+    <button class="modalClose" data-close="payOverlay">✕</button>
+    <div class="comingSoon">
+      <div class="ic">🔐</div>
+      <h3>Payment Coming Soon!</h3>
+      <p>We're building a secure UPI, Card & Net Banking gateway. Your order's saved — we'll notify you the moment payments go live.</p>
+      <input id="waitlistEmail" type="email" placeholder="you@example.com" style="margin-bottom:14px;">
+      <button class="modalPrimary" id="notifyBtn">🔔 Notify Me When Live</button>
+      <div class="loc" id="payLoc"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   JUTE WORLD — Nike-style rebuild
+   Drop real photos into /images named exactly as each
+   product's `img` value and they'll replace the placeholders.
+   ========================================================= */
+
+const CATEGORIES = [
+  {id:'Bags', ic:'👜', label:'Bags'},
+  {id:'Home', ic:'🧺', label:'Home & Decor'},
+  {id:'Accessories', ic:'🍶', label:'Accessories'},
+];
+
+const PRODUCTS = [
+  {id:'tote', name:'Jute Tote Bag', cat:'Bags', ic:'👜', img:'images/tote.jpg', price:499, colors:['#C89B3C','#5C3A21','#EFE3C0'], isNew:true},
+  {id:'mat', name:'Jute Door Mat', cat:'Home', ic:'🚪', img:'images/mat.jpg', price:349, colors:['#C89B3C','#3B2A1E'], best:true},
+  {id:'bottle', name:'Jute Bottle Cover', cat:'Accessories', ic:'🍶', img:'images/bottle.jpg', price:199, colors:['#C89B3C','#C1440E'], isNew:true},
+  {id:'basket', name:'Handwoven Jute Basket', cat:'Home', ic:'🧺', img:'images/basket.jpg', price:649, colors:['#C89B3C','#3B2A1E'], best:true},
+  {id:'cushion', name:'Jute Cushion Cover', cat:'Home', ic:'🛋️', img:'images/cushion.jpg', price:399, colors:['#C89B3C','#3F8C3F']},
+  {id:'rug', name:'Braided Jute Rug', cat:'Home', ic:'🧶', img:'images/rug.jpg', price:1899, colors:['#C89B3C','#5C3A21','#3F8C3F'], best:true},
+  {id:'wall', name:'Jute Wall Hanging', cat:'Accessories', ic:'🖼️', img:'images/wall.jpg', price:749, colors:['#C89B3C','#C1440E']},
+  {id:'runner', name:'Jute Table Runner', cat:'Home', ic:'🍽️', img:'images/runner.jpg', price:449, colors:['#C89B3C','#3B2A1E']},
+];
+
+const bag = {}; // id -> qty
+let signedInUser = null;
+let detectedLocationText = '';
+let currentFilter = 'All';
+
+/* ---------- announcement marquee ---------- */
+const annText = 'FREE SHIPPING ABOVE ₹999 &nbsp; · &nbsp; <b>HANDWOVEN IN INDIA</b> &nbsp; · &nbsp; JUST LAUNCHED &nbsp; · &nbsp; ';
+document.getElementById('announceTrack').innerHTML = `<span>${annText.repeat(4)}</span><span>${annText.repeat(4)}</span>`;
+
+/* ---------- hero product (big, tilted) ---------- */
+function productMedia(p, sizeClass){
+  return `
+    <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+    <div class="fallback ${sizeClass||''}" style="display:none;align-items:center;justify-content:center;font-size:${sizeClass==='big'?'160px':'70px'};">${p.ic}</div>
+  `;
+}
+document.getElementById('heroProduct').innerHTML = productMedia(PRODUCTS[0], 'big');
+
+/* ---------- category tiles ---------- */
+document.getElementById('catTiles').innerHTML = CATEGORIES.map(c=>`
+  <div class="catTile" data-cat="${c.id}">
+    <div class="catIc">${c.ic}</div>
+    <h3>${c.label}</h3>
+    <div class="arrow">Shop Now →</div>
+  </div>
+`).join('');
+document.getElementById('catTiles').addEventListener('click', e=>{
+  const tile = e.target.closest('.catTile');
+  if(!tile) return;
+  currentFilter = tile.dataset.cat;
+  renderChips(); renderGrid();
+  document.getElementById('shop').scrollIntoView({behavior:'smooth'});
+});
+
+/* ---------- filter chips ---------- */
+function renderChips(){
+  const cats = ['All', ...new Set(PRODUCTS.map(p=>p.cat))];
+  document.getElementById('chipRow').innerHTML = cats.map(c=>
+    `<button class="chip ${c===currentFilter?'active':''}" data-cat="${c}">${c}</button>`
+  ).join('');
+}
+document.getElementById('chipRow').addEventListener('click', e=>{
+  const chip = e.target.closest('.chip');
+  if(!chip) return;
+  currentFilter = chip.dataset.cat;
+  renderChips(); renderGrid();
+});
+
+/* ---------- product grid ---------- */
+function renderGrid(){
+  const list = currentFilter==='All' ? PRODUCTS : PRODUCTS.filter(p=>p.cat===currentFilter);
+  document.getElementById('prodGrid').innerHTML = list.map(p=>`
+    <div class="prodCard" data-id="${p.id}">
+      <div class="prodImgWrap">
+        ${p.isNew ? '<div class="tagPill new">New</div>' : (p.best ? '<div class="tagPill best">Bestseller</div>' : '')}
+        ${productMedia(p)}
+        <div class="floorShadowSm"></div>
+        <button class="quickAdd" data-id="${p.id}" title="Quick add">+</button>
+      </div>
+      <div class="prodInfo">
+        <div class="cat">${p.cat}</div>
+        <h3>${p.name}</h3>
+        <div class="colorways">${p.colors.map(c=>`<span style="background:${c}"></span>`).join('')}</div>
+        <div class="price">₹${p.price.toLocaleString('en-IN')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+renderChips();
+renderGrid();
+
+document.getElementById('prodGrid').addEventListener('click', e=>{
+  const quick = e.target.closest('.quickAdd');
+  if(quick){ addToBag(quick.dataset.id); flashAdded(quick); return; }
+});
+function flashAdded(btn){
+  const original = btn.textContent;
+  btn.textContent = '✓';
+  setTimeout(()=> btn.textContent = original, 900);
+}
+
+/* ---------- bag logic ---------- */
+function addToBag(id){ bag[id] = (bag[id]||0)+1; updateBagCount(); }
+function updateBagCount(){
+  document.getElementById('bagCount').textContent = Object.values(bag).reduce((a,b)=>a+b,0);
+}
+function renderBag(){
+  const box = document.getElementById('bagItems');
+  const ids = Object.keys(bag).filter(id=>bag[id]>0);
+  if(ids.length===0){
+    box.innerHTML = '<div class="emptyBag">Your bag is empty.<br>Go find something handwoven.</div>';
+    document.getElementById('bagTotal').textContent = '₹0';
+    return;
+  }
+  let total = 0;
+  box.innerHTML = ids.map(id=>{
+    const p = PRODUCTS.find(pp=>pp.id===id);
+    const lineTotal = p.price*bag[id];
+    total += lineTotal;
+    return `<div class="bagRow">
+      <div class="thumb">${p.ic}</div>
+      <div class="info"><h4>${p.name}</h4><div class="p">Qty ${bag[id]} · ₹${lineTotal.toLocaleString('en-IN')}</div></div>
+      <button data-id="${id}" class="removeBtn">Remove</button>
+    </div>`;
+  }).join('');
+  document.getElementById('bagTotal').textContent = '₹'+total.toLocaleString('en-IN');
+  box.querySelectorAll('.removeBtn').forEach(b=>{
+    b.onclick = ()=>{ delete bag[b.dataset.id]; updateBagCount(); renderBag(); };
+  });
+}
+
+const bagOverlay = document.getElementById('bagOverlay');
+document.getElementById('bagBtn').onclick = ()=>{ renderBag(); bagOverlay.classList.add('show'); };
+document.getElementById('bagClose').onclick = ()=> bagOverlay.classList.remove('show');
+bagOverlay.addEventListener('click', e=>{ if(e.target===bagOverlay) bagOverlay.classList.remove('show'); });
+
+document.getElementById('heroShopBtn').onclick = ()=> document.getElementById('shop').scrollIntoView({behavior:'smooth'});
+
+/* ---------- generic modal open/close ---------- */
+function openOverlay(id){ document.getElementById(id).classList.add('show'); }
+function closeOverlay(id){ document.getElementById(id).classList.remove('show'); }
+document.querySelectorAll('[data-close]').forEach(btn=>{ btn.onclick = ()=> closeOverlay(btn.dataset.close); });
+
+/* ---------- sign in ---------- */
+document.getElementById('signinBtn').onclick = ()=> openOverlay('signinOverlay');
+document.getElementById('siSubmit').onclick = ()=>{
+  const name = document.getElementById('siName').value.trim();
+  if(!name){ document.getElementById('siName').focus(); return; }
+  signedInUser = {name};
+  document.getElementById('signinBtn').textContent = '👤 '+name.split(' ')[0];
+  closeOverlay('signinOverlay');
+};
+
+/* ---------- checkout flow ---------- */
+document.getElementById('checkoutBtn').onclick = ()=>{
+  const ids = Object.keys(bag).filter(id=>bag[id]>0);
+  if(ids.length===0) return;
+  let total = 0;
+  const lines = ids.map(id=>{
+    const p = PRODUCTS.find(pp=>pp.id===id);
+    const lt = p.price*bag[id]; total += lt;
+    return `<div class="cartRow"><span>${p.name} × ${bag[id]}</span><span>₹${lt.toLocaleString('en-IN')}</span></div>`;
+  }).join('') + `<div class="cartRow"><span>Total</span><span>₹${total.toLocaleString('en-IN')}</span></div>`;
+  document.getElementById('orderSummary').innerHTML = lines;
+  bagOverlay.classList.remove('show');
+  openOverlay('orderOverlay');
+};
+document.getElementById('toPay').onclick = ()=>{
+  const name = document.getElementById('ordName').value.trim();
+  const mobile = document.getElementById('ordMobile').value.trim();
+  const addr = document.getElementById('ordAddress').value.trim();
+  if(!name){ document.getElementById('ordName').focus(); return; }
+  if(!mobile){ document.getElementById('ordMobile').focus(); return; }
+  if(!addr){ document.getElementById('ordAddress').focus(); return; }
+  closeOverlay('orderOverlay');
+  openOverlay('payOverlay');
+  document.getElementById('payLoc').textContent = detectedLocationText ? `Detected delivery area: ${detectedLocationText}` : '';
+};
+document.getElementById('notifyBtn').onclick = (e)=>{
+  const email = document.getElementById('waitlistEmail').value.trim();
+  if(!email){ document.getElementById('waitlistEmail').focus(); return; }
+  e.target.textContent = "You're on the list ✓";
+  e.target.disabled = true;
+};
+document.getElementById('newsSubmit').onclick = ()=>{
+  const email = document.getElementById('newsEmail').value.trim();
+  if(!email){ document.getElementById('newsEmail').focus(); return; }
+  document.getElementById('newsSubmit').textContent = 'Signed Up ✓';
+};
+
+/* ---------- location detect ---------- */
+const locText = document.getElementById('locText');
+document.getElementById('locateBtn').onclick = detectLocation;
+function detectLocation(){
+  if(!navigator.geolocation){ locText.textContent='Not supported'; return; }
+  locText.textContent = 'Detecting…';
+  navigator.geolocation.getCurrentPosition(async (pos)=>{
+    const {latitude, longitude} = pos.coords;
+    try{
+      const res = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${latitude}&longitude=${longitude}&localityLanguage=en`);
+      const data = await res.json();
+      detectedLocationText = [data.city || data.locality, data.principalSubdivision].filter(Boolean).join(', ') || `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+    }catch(err){
+      detectedLocationText = `${latitude.toFixed(2)}, ${longitude.toFixed(2)}`;
+    }
+    locText.textContent = detectedLocationText;
+  }, ()=>{ locText.textContent = 'Unavailable'; }, {timeout:8000});
+}
+</script>
+</body>
+</html>
